@@ -1,5 +1,7 @@
 # Logseq Plugin Template React 🚀
 
+This plugin uses [Logseq Plugin Template React](https://github.com/pengx17/logseq-plugin-template-react).
+
 ## Features
 
 - Plug-and-play boilerplate with properly defined GitHub action defaults
@@ -8,6 +10,7 @@
 - Pnpm
 
 ## How to get started
+
 1. Clone the repository or use the button "Use this template" on GitHub to create your own version of the repository 🔨
 2. Make sure you have pnpm installed, [install](https://pnpm.io/installation) if necessary 🛠
 3. Execute `pnpm install` 📦
