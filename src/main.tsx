@@ -5,6 +5,9 @@ import * as ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import settings from "./settings";
+import { WebClient } from "@slack/web-api";
+
+const web = new WebClient(logseq.settings?.slackBotToken);
 
 async function sendToSlack() {
   const block = await logseq.Editor.getCurrentBlock();
@@ -13,11 +16,37 @@ async function sendToSlack() {
   }
 
   const { content, uuid } = block;
+  if (content === "") {
+    return;
+  }
+
+  const channelId = logseq.settings?.slackChannelId;
+  if (channelId === "") {
+    logseq.UI.showMsg("Channel ID が設定されていません");
+    return;
+  }
+
+  const result = await web.chat.postMessage({
+    channel: channelId,
+    text: content,
+  });
+
+  if (!result.ok) {
+    logseq.UI.showMsg(`
+    [:div.p-2
+      [:h2 "送信できませんでした"]
+      [:p "エラー: ${result.error}"]
+    ]
+  `);
+  }
+
+  const suffix = `p${result.ts?.replace(".", "")}`;
   logseq.UI.showMsg(`
-      [:div.p-2
-      [:h1 "#${uuid}"]
-      [:h2.text-xl "${content}"]]
-    `);
+    [:div.p-2
+      [:h2 "送信しました"]
+      [:p "https://TODO.slack.com/archives/${result.channel}/${suffix}"]
+    ]
+  `);
 }
 
 async function showSettings() {
